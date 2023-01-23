@@ -1,4 +1,5 @@
 import { Calendar } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -31,8 +32,7 @@ export namespace calendar {
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new Calendar(calendarEl, {
-            plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
-            //plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
+            plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -40,7 +40,26 @@ export namespace calendar {
             },
             navLinks: true, // can click day/week names to navigate views
             editable: true,
+            selectable: true,
             dayMaxEvents: true, // allow "more" link when too many events
+            select: function (info) {
+                alert('selected ' + info.startStr + ' to ' + info.endStr);
+                var title = prompt('Enter event title');
+                //var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+                var date = new Date(info.startStr + 'T00:00:00'); // will be in local time
+
+                if (!isNaN(date.valueOf())) { // valid?
+                    calendar.addEvent({
+                        title: title,
+                        start: date,
+                        allDay: true
+                    });
+                    alert('Great. Now, update your database...');
+                } else {
+                    alert('Invalid date.');
+
+                }
+            }
         });
 
         calendar.render();
