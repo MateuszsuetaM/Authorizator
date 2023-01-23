@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics;
 
 namespace Authorizator.Pages
 {
@@ -16,5 +17,12 @@ namespace Authorizator.Pages
         {
 
         }
+        public IActionResult OnPostAaaa([FromBody] string aaa)
+        {
+            Debug.WriteLine("Super");
+            Console.WriteLine("Super");
+            return new JsonResult("aaa");
+        }
+
     }
 }
