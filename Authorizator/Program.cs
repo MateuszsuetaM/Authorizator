@@ -35,6 +35,8 @@ builder.Services.AddAuthentication().AddGoogle(options =>
        options.ClientSecret = googleAuthNSection["ClientSecret"];
    });
 
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
