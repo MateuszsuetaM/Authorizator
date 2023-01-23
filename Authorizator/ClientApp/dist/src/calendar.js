@@ -1,7 +1,9 @@
 import { Calendar } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import * as $ from 'jquery';
 export var calendar;
 (function (calendar_1) {
     var meth = /** @class */ (function () {
@@ -32,73 +34,47 @@ export var calendar;
     function renderCalendar() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new Calendar(calendarEl, {
-            plugins: [dayGridPlugin, timeGridPlugin, listPlugin],
-            //plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
+            plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
             },
-            initialDate: '2018-01-12',
             navLinks: true,
             editable: true,
+            selectable: true,
             dayMaxEvents: true,
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: '2018-01-01',
-                },
-                {
-                    title: 'Long Event',
-                    start: '2018-01-07',
-                    end: '2018-01-10'
-                },
-                {
-                    //groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2018-01-09T16:00:00'
-                },
-                {
-                    //groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2018-01-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2018-01-11',
-                    end: '2018-01-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2018-01-12T10:30:00',
-                    end: '2018-01-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2018-01-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2018-01-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2018-01-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2018-01-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2018-01-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2018-01-28'
+            select: function (info) {
+                alert('selected ' + info.startStr + ' to ' + info.endStr);
+                var title = prompt('Enter event title');
+                //var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+                var date = new Date(info.startStr + 'T00:00:00'); // will be in local time
+                if (!isNaN(date.valueOf())) { // valid?
+                    calendar.addEvent({
+                        title: title,
+                        start: date,
+                        allDay: true
+                    });
+                    $.ajax({
+                        type: "POST",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN", $("input:hidden[name=\"__RequestVerificationToken\"]").val().toString());
+                        },
+                        url: "?handler=Aaaa",
+                        data: JSON.stringify('testowe dane'),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            alert("fantastycznie");
+                        },
+                        error: function () {
+                            alert("error :(");
+                        }
+                    });
                 }
-            ]
+                else {
+                    alert('Invalid date.');
+                }
+            }
         });
         calendar.render();
     }

@@ -3,6 +3,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import * as $ from 'jquery'
+
 export namespace calendar {
     export class meth {
         aa(): void {
@@ -54,7 +56,23 @@ export namespace calendar {
                         start: date,
                         allDay: true
                     });
-                    alert('Great. Now, update your database...');
+                    $.ajax({
+                        type: "POST",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN", $(`input:hidden[name="__RequestVerificationToken"]`).val().toString());
+                        },
+                        url: "?handler=Aaaa",
+                        data: JSON.stringify('testowe dane'),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            alert("fantastycznie")
+
+                        },
+                        error: () => {
+                            alert("error :(")
+                        }
+                    });
+
                 } else {
                     alert('Invalid date.');
 
