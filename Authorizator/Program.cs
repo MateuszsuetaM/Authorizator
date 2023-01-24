@@ -1,9 +1,9 @@
 using Authorizator.Data;
+using Authorizator.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 31));
 var connectionString = builder.Configuration.GetConnectionString("MySqlTest");
@@ -32,9 +32,8 @@ builder.Services.AddAuthentication().AddGoogle(options =>
    {
        IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
        options.ClientId = googleAuthNSection["ClientId"];
-       options.ClientSecret = googleAuthNSection["ClientSecret"];
+       options.ClientSecret = SecretGuard.getKeyFromFile(googleAuthNSection["ClientSecret"]);
    });
-
 builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 var app = builder.Build();
