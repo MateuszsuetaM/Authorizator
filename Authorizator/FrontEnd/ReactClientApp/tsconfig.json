@@ -5,6 +5,15 @@
     "module": "es6",
     "jsx": "react",
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "allowJs":  true
+  },
+  "include": [
+    "src/",
+    "decs.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "skipLibCheck": true
 }
