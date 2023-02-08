@@ -1,0 +1,11 @@
+{
+  "name": "reactclient",
+  "version": "1.0.0",
+  "description": "rfront",
+  "main": "index.js",
+  "scripts": {
+    "test": "tst"
+  },
+  "author": "Matiz",
+  "license": "ISC"
+}
